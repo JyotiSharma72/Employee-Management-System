@@ -1,11 +1,13 @@
 # Employee-Management-System
 An advanced employee management system built using HTML, CSS, Node.js, and MongoDB.This project includes functionalities like user registration, login, and various features to manage employee-related information such as managing employee details, salary, attendance, and leaves.
+
 Table of Contents
 Introduction
 Features
 Technologies Used
 Installation
 Usage
+
 Introduction
 The Employee Management System is designed to streamline and simplify the management of employee information. It offers a user-friendly interface for managing attendance, salary, leaves, and employee details, allowing administrators to easily access, update and manage the information.
 
@@ -28,7 +30,7 @@ Install MongoDB locally or use MongoDB Atlas (cloud database service).
 Installation
 Clone the repository to your local machine:
 
-git clone https://github.com/natashagargn/Employee-Management-System-Advanced.git
+git clone https://github.com/JyotiSharma72/Employee-Management-System
 Navigate to the project directory:
 
 cd Employee-Management-System-Advanced
