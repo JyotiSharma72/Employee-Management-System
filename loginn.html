@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>seek coding</title>
+    <link rel="stylesheet" href="loginsty.css">
+</head>
+
+<body>
+    <div class="hero">
+        <div class="form-box">
+            <div class="button-box">
+                <div id="btn"></div>
+                <button type="button" class="toggle-btn" onclick="login()">Log In</button>
+                <button type="button" class="toggle-btn" onclick="register()">Register</button>
+            </div>
+            <div class="social-icons">
+                <img src="images/account/fb.png">
+                <img src="images/account/tw.png">
+                <img src="images/account/gp.png">
+            </div>
+            <form id="login" class="input-group">
+                <input type="text" id="login_username" class="input-field" name="emailid" placeholder="User-Id"
+                    required>
+                <input type="password" id="login_password" class="input-field" name="passwd"
+                    placeholder="Enter Password" required>
+                <div id="loginPasswordError" class="error-message"></div> <!-- Error message for login password -->
+                <input type="checkbox" class="chech-box"><span>Remember password</span>
+                <button type="submit" class="submit-btn" id="loginButton">Log in</button>
+            </form>
+            <form id="register" class="input-group">
+                <input type="text" class="input-field" name="username" placeholder="Username" id="register_username"
+                    required>
+                <input type="password" class="input-field" name="passwd" placeholder="Password" id="register_password"
+                    required>
+                <div id="registerPasswordError" class="error-message"></div>
+                <!-- Error message for register password -->
+                <input type="checkbox" class="chech-box"><span>I agree to the terms & conditions</span>
+                <button type="submit" class="submit-btn" id="registerButton">Register</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        var x = document.getElementById("login");
+        var y = document.getElementById("register");
+        var z = document.getElementById("btn");
+
+        let isButtonRight = true;
+
+        function moveButton(button) {
+            button.style.position = 'relative';
+            if (isButtonRight) {
+                button.style.left = '-100px';
+            } else {
+                button.style.left = '100px';
+            }
+            isButtonRight = !isButtonRight;
+        }
+
+        function showErrorMessage(elementId, message) {
+            document.getElementById(elementId).textContent = message;
+        }
+
+        function clearErrorMessage(elementId) {
+            document.getElementById(elementId).textContent = '';
+        }
+
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+
+        async function Signup(e) {
+            e.preventDefault();
+            const register_password = document.getElementById("register_password").value;
+            const registerButton = document.getElementById("registerButton");
+
+            if (!validatePassword(register_password)) {
+                showErrorMessage("registerPasswordError", "Password must be at least 6 characters long.");
+                moveButton(registerButton);
+                return;
+            } else {
+                clearErrorMessage("registerPasswordError");
+            }
+
+            const register_username = document.getElementById("register_username").value;
+            try {
+                const response = await fetch('http://localhost:3000/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: register_username,
+                        password: register_password
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(result.message);
+
+                    if (result.message === "Register Successfully") {
+                        login();  // Show the login form after successful registration
+                    }
+                } else {
+                    console.error('Signup failed:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error during signup:', error);
+            }
+        }
+
+        async function SignupLogin(e) {
+            e.preventDefault();
+            const login_password = document.getElementById("login_password").value;
+            const loginButton = document.getElementById("loginButton");
+
+            if (!validatePassword(login_password)) {
+                showErrorMessage("loginPasswordError", "Password must be at least 6 characters long.");
+                moveButton(loginButton);
+                return;
+            } else {
+                clearErrorMessage("loginPasswordError");
+            }
+
+            const login_username = document.getElementById("login_username").value;
+            try {
+                const response = await fetch('http://localhost:3000/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: login_username,
+                        password: login_password
+                    })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(result.message);
+
+                    if (result.message === "Login successfull") {
+                        window.location.href = "./home.html";  // Redirect to home.html
+                    } else {
+                        console.error('Unexpected response:', result);
+                    }
+                } else {
+                    const errorText = await response.text();
+                    console.error('Login failed:', errorText);
+                    alert('Login failed: ' + errorText);
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                alert('Error during login: ' + error.message);
+            }
+        }
+
+        function register() {
+            x.style.left = "-400px";
+            y.style.left = "50px";
+            z.style.left = "110px";
+        }
+
+        function login() {
+            x.style.left = "50px";
+            y.style.left = "450px";
+            z.style.left = "0";
+        }
+
+        // Add event listeners
+        document.getElementById("register").addEventListener("submit", Signup);
+        document.getElementById("login").addEventListener("submit", SignupLogin);
+    </script>
+</body>
+
+</html>

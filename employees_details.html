@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        /* Background Image */
+        .bg-image {
+            background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?crop=entropy&cs=tinysrgb&fit=crop&w=1080&q=80');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(80%);
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        /* Content Styling */
+        .content {
+            color: #f0f4f7;
+            background-color: rgba(60, 80, 100, 0.8); /* Light grey-blue */
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 5rem;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Table Styling */
+        .table {
+            background-color: #cfdce5; /* Light grey-blue for table */
+            color: #333;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .table th {
+            background-color: #003847;  /* Dark Teal */
+            color: #f0f4f7;  /* Light Text */
+            text-align: center;
+        }
+        .table td {
+            text-align: center;
+        }
+        .table tbody tr:nth-child(even) {
+            background-color: #aacbd1;  /* Soft teal */
+        }
+        .table tbody tr:nth-child(odd) {
+            background-color: #cfdce5;  /* Light grey-blue */
+        }
+        .table-bordered td, .table-bordered th {
+            border: 1px solid #839aa9;  /* Light border */
+        }
+        .banner-background {
+            clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 91%, 63% 100%, 22% 91%, 0 99%, 0 0);
+            background-color: rgba(0, 0, 255, 0.5);
+            /* Hero section with transparency */
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 255, 0.2);
+            /* Navbar with a different shade and transparency */
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: rgb(235, 239, 182) !important;
+        }
+
+        .navbar-brand:hover,
+        .nav-link:hover {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        body {
+            overflow-x: hidden;
+            /* Hide horizontal scrollbar */
+        }
+
+        .brand-text {
+            font-size: 1.5rem;
+            /* Increase size */
+            font-weight: bold;
+            /* Make text bold */
+            text-decoration: underline;
+            /* Underline text */
+            color: rgb(235, 239, 182)
+            /* Set text color (white for visibility on dark backgrounds) */
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-image"></div>
+    <div class="container mt-5">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+            <!-- <a class="navbar-brand mx-5" href="icon.JPG">EMS</a> -->
+            <a class="navbar-brand mx-5" href="icon.JPG">
+                <span class="brand-text">EMS</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="employees_details.html">Employee Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="salary.html">Salary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="attendance.html">Attendance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="leaves.html">Leaves</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="content text-center">
+            <h2>Employee Details</h2>
+            <p>View and manage employee information easily.</p>
+            <table class="table table-bordered mt-4">
+                <thead>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Department</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>101</td>
+                        <td>Kanha</td>
+                        <td>HR Manager</td>
+                        <td>Human Resources</td>
+                    </tr>
+                    <tr>
+                        <td>102</td>
+                        <td>Poonam</td>
+                        <td>Software Engineering</td>
+                        <td>IT</td>
+                    </tr>
+                    <tr>
+                        <td>103</td>
+                        <td>Natasha Garg</td>
+                        <td>HR Manager</td>
+                        <td>Human Resources</td>
+                    </tr>
+                    <tr>
+                        <td>104</td>
+                        <td>Isha</td>
+                        <td>HR Manager</td>
+                        <td>Human Resources</td>
+                    </tr>
+                    <!-- Additional employee rows can be added here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+

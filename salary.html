@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        .bg-image {
+            background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMzAzMTV8MHwxfGFsbHwxfHxidXNpbmVzc3x8fHx8fHwxNjg5MTczMzgz&ixlib=rb-4.0.3&q=80&w=1080');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(80%);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .content {
+            color: #fff;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 5rem;
+        }
+        .banner-background {
+            clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 91%, 63% 100%, 22% 91%, 0 99%, 0 0);
+            background-color: rgba(0, 0, 255, 0.5);
+            /* Hero section with transparency */
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 255, 0.2);
+            /* Navbar with a different shade and transparency */
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: rgb(235, 239, 182) !important;
+        }
+
+        .navbar-brand:hover,
+        .nav-link:hover {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        body {
+            overflow-x: hidden;
+            /* Hide horizontal scrollbar */
+        }
+
+        .brand-text {
+            font-size: 1.5rem;
+            /* Increase size */
+            font-weight: bold;
+            /* Make text bold */
+            text-decoration: underline;
+            /* Underline text */
+            color: rgb(235, 239, 182)
+            /* Set text color (white for visibility on dark backgrounds) */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-image"></div>
+    <div class="container mt-5">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+            <!-- <a class="navbar-brand mx-5" href="icon.JPG">EMS</a> -->
+            <a class="navbar-brand mx-5" href="icon.JPG">
+                <span class="brand-text">EMS</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="employees_details.html">Employee Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="salary.html">Salary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="attendance.html">Attendance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="leaves.html">Leaves</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="content text-center">
+            <h2>Salary Management</h2>
+            <p>View and manage employee salaries, bonuses, and deductions effortlessly.</p>
+            <a href="view_salary.html" class="btn btn-info">View Salary Details</a>
+            <button class="btn btn-light" data-toggle="modal" data-target="#payslipModal">Generate Payslip</button>
+        </div>
+    </div>
+
+    <!-- Modal for Payslip Generation -->
+    <div class="modal fade" id="payslipModal" tabindex="-1" role="dialog" aria-labelledby="payslipModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="payslipModalLabel">Employee Payslip</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h6>Employee Name: Natasha Garg</h6>
+                    <p><strong>Basic Salary:</strong> $4,000</p>
+                    <p><strong>Bonus:</strong> $500</p>
+                    <p><strong>Deductions:</strong> $200</p>
+                    <p><strong>Total Salary:</strong> $4,300</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="downloadPdfBtn" class="btn btn-primary">Download PDF</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jsPDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+    <!-- JavaScript to Generate PDF -->
+    <script>
+        document.getElementById("downloadPdfBtn").addEventListener("click", function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // PDF content
+            doc.text("Employee Payslip", 10, 10);
+            doc.text("Employee Name: Natasha Garg", 10, 20);
+            doc.text("Basic Salary: $4,000", 10, 30);
+            doc.text("Bonus: $500", 10, 40);
+            doc.text("Deductions: $200", 10, 50);
+            doc.text("Total Salary: $4,300", 10, 60);
+
+            // Save the PDF with a name
+            doc.save("Employee_Payslip.pdf");
+
+            // Close the modal after download
+            $('#payslipModal').modal('hide');
+        });
+    </script>
+</body>
+
+</html>
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salary Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        .bg-image {
+            background-image: url('https://source.unsplash.com/1600x900/?business,salary');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(80%);
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+        }
+        .content {
+            color: #fff;
+            background-color: rgba(0, 0, 255, 0.5);
+            padding: 2rem;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-image"></div>
+    <div class="container mt-5">
+        <div class="content text-center">
+            <h2>Salary Management</h2>
+            <p>View and manage employee salaries, bonuses, and deductions effortlessly.</p>
+            <a href="#" class="btn btn-light">Generate Payslip</a>
+            <a href="view_salary.html" class="btn btn-info">View Salary Details</a>
+        </div>
+    </div>
+</body>
+</html> -->
