@@ -141,8 +141,8 @@
                     const result = await response.json();
                     alert(result.message);
 
-                    if (result.message === "Login successfull") {
-                        window.location.href = "./home.html";  // Redirect to home.html
+                    if (result.message === "Login successful") {
+                        window.location.href = "/home.html";  // Redirect to home.html
                     } else {
                         console.error('Unexpected response:', result);
                     }
