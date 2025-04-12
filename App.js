@@ -8,7 +8,8 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
-const dbconnect = "your_mongo_connection_string_here";
+const dbconnect = "mongodb+srv://jyotisharma6672:19Oct2001%40@em.x62ay.mongodb.net/?retryWrites=true&w=majority&appName=em";
+
 // Middleware
 app.use(cors());
 app.use(express.json());
