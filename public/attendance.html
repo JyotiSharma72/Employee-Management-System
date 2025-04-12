@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        /* Updated background image link */
+        .bg-image {
+            background-image: url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-4.0.3&q=80&w=1080');
+            background-size: cover;
+            background-position: center;
+            filter: brightness(80%);
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+        }
+        .content {
+            color: #333;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 5rem;
+        }
+        .banner-background {
+            clip-path: polygon(30% 0%, 70% 0%, 100% 0, 100% 91%, 63% 100%, 22% 91%, 0 99%, 0 0);
+            background-color: rgba(0, 0, 255, 0.5);
+            /* Hero section with transparency */
+        }
+
+        .navbar {
+            background-color: rgba(0, 0, 255, 0.2);
+            /* Navbar with a different shade and transparency */
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: rgb(235, 239, 182) !important;
+        }
+
+        .navbar-brand:hover,
+        .nav-link:hover {
+            color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        body {
+            overflow-x: hidden;
+            /* Hide horizontal scrollbar */
+        }
+
+        .brand-text {
+            font-size: 1.5rem;
+            /* Increase size */
+            font-weight: bold;
+            /* Make text bold */
+            text-decoration: underline;
+            /* Underline text */
+            color: rgb(235, 239, 182)
+            /* Set text color (white for visibility on dark backgrounds) */
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-image"></div>
+    <div class="container mt-5 ">
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+            <!-- <a class="navbar-brand mx-5" href="icon.JPG">EMS</a> -->
+            <a class="navbar-brand mx-5" href="icon.JPG">
+                <span class="brand-text">EMS</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="home.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="employees_details.html">Employee Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="salary.html">Salary</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="attendance.html">Attendance</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="leaves.html">Leaves</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="content text-center">
+            <h2>Attendance Tracking</h2>
+            <p>Monitor and manage employee attendance records with ease.</p>
+            <a href="view_attendance.html" class="btn btn-primary">View Attendance</a>
+            <a href="generate_report.html" class="btn btn-secondary">Generate Report</a>
+        </div>
+    </div>
+</body>
+</html>
