@@ -1,163 +1,149 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const path = require('path');
-const dbconnect = 'mongodb+srv://jyotisharma6672:Qf4aA4Q184BTI0nd@emp.i8sw6.mongodb.net/';
 
 const app = express();
 const PORT = 3000;
-app.use(express.static("public"));
-const cors = require("cors")
 
-// Middleware to parse JSON and urlencoded bodies
+const dbconnect = "your_mongo_connection_string_here";
+// Middleware
+app.use(cors());
 app.use(express.json());
-app.use(bodyParser.json())
-app.use(cors())
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(bodyParser.urlencoded({ extended: true }))
+// ✅ Serve static files from 'public' folder
+app.use(express.static(path.join(__dirname, 'public')));
 
-mongoose.connect(dbconnect);
+// MongoDB Connection
+mongoose.connect(dbconnect, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("✅ Connected to MongoDB"))
+.catch(err => console.error("❌ MongoDB Connection Error:", err));
+
+// User Schema
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    require: true
+    required: true,
+    unique: true
   },
   password: {
     type: String,
-    require: true,
+    required: true,
   }
-
-})
+});
 
 const Users = mongoose.model("users", userSchema);
 
+// ✅ Register Route
 app.post("/register", async (req, res) => {
   const { username, password } = req.body;
-  console.log(username, password)
 
   if (!username || !password) {
-    return res.json({
-      message: "Required Feilds"
-    })
+    return res.status(400).json({ message: "Required Fields" });
   }
 
   try {
-    const user = await Users.findOne({ username })
-
-    if (user) {
-      return res.json({
-        message: "Username is already used",
-      })
+    const existingUser = await Users.findOne({ username });
+    if (existingUser) {
+      return res.status(400).json({ message: "Username is already taken" });
     }
-    const newUser = Users({
-      username,
-      password
-    })
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new Users({ username, password: hashedPassword });
     await newUser.save();
 
-    res.json({
-      message: "Register Successfully"
-    })
+    // ✅ Match frontend expected message OR change frontend to "Registered Successfully"
+    res.status(201).json({ message: "Register Successfully" });
   } catch (err) {
-    res.json({
-      message: "Something went wrong",
-      err: err.message
-    })
+    res.status(500).json({ message: "Something went wrong", error: err.message });
   }
-})
+});
 
+// ✅ Login Route
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
-  console.log(username, password)
 
   if (!username || !password) {
-    return res.json({
-      message: "Required Feilds"
-    })
+    return res.status(400).json({ message: "Required Fields" });
   }
 
   try {
-    const user = await Users.findOne({ username })
-
-    if (!user) {
-      return res.json({
-        message: "Username not exist",
-      })
-    }
-    const check = user.password === password;
-
-    if (check) {
-      return res.json({
-        message: "Login successfull",
-      })
-    }
-
-    res.json({
-      message: "Login Failed"
-    })
-  } catch (err) {
-    res.json({
-      message: "Something went wrong",
-      err: err.message
-    })
-  }
-})
-
-// Define a route for the root URL '/'
-app.get('/', (req, res) => {
-  // Send the index.html file as a response
-  // res.send("something is here")
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-
-// Define a route for handling form submission to create a new user
-app.post('/newuser', async (req, res) => {
-  const { username, password } = req.body;
-  console.log(req.body);
-  // You can send a response back if needed
-  let user = new Users({ username, password });
-  await user.save();
-  res.send('New user created successfully!');
-});
-
-app.post('/delete', async (req, res) => {
-  const { username } = req.body;
-  // You can send a response back if needed
-
-  Users.deleteOne({ username }).then(() => {
-    res.send('Delete successfully!');
-  })
-});
-
-app.post('/update', async (req, res) => {
-  const { username, password } = req.body;
-
-  try {
-    // Find the user by username and update their password
     const user = await Users.findOne({ username });
     if (!user) {
-      // If user not found, send an error response
-      return res.status(404).send('User not found');
+      return res.status(404).json({ message: "Username does not exist" });
     }
 
-    // Update the user's password
-    user.password = password;
-    await user.save();
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
 
-    res.send('Password updated successfully!');
-  } catch (error) {
-    console.error('Error updating password:', error);
-    res.status(500).send('Internal Server Error');
+    // ✅ Match exact message expected by frontend for redirect
+    res.status(200).json({ message: "Login successful" });
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong", error: err.message });
   }
 });
 
-app.get('/alluser', async (req, res) => {
-  let alluser = await Users.find({});
-  res.json(alluser);
-})
+// ✅ Delete User
+app.post("/delete", async (req, res) => {
+  const { username } = req.body;
 
-// Start the server
+  try {
+    const result = await Users.deleteOne({ username });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ message: "User deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong", error: err.message });
+  }
+});
+
+// ✅ Update Password
+app.post("/update", async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const user = await Users.findOne({ username });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.password = await bcrypt.hash(password, 10);
+    await user.save();
+    res.json({ message: "Password updated successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong", error: err.message });
+  }
+});
+
+// ✅ Get All Users (excluding password)
+app.get("/alluser", async (req, res) => {
+  try {
+    const allUsers = await Users.find({}, { password: 0 });
+    res.json(allUsers);
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong", error: err.message });
+  }
+});
+
+// ✅ Serve login page
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+
+// ✅ Serve home page explicitly (optional but helpful)
+app.get('/home.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'home.html'));
+});
+
+// ✅ Start the server
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
